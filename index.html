@@ -185,9 +185,10 @@
     .canvas-wrapper.visible { display: block; }
     #preview-canvas {
       width: 100%;
-      max-height: 450px;
-      object-fit: contain;
+      max-width: 600px;
+      max-height: 400px;
       display: block;
+      margin: 0 auto;
     }
     .analyze-btn {
       width: 100%;
@@ -671,13 +672,13 @@
         ctx.shadowColor = color;
         ctx.shadowBlur = 10;
         ctx.strokeStyle = color;
-        ctx.lineWidth = 6;
+        ctx.lineWidth = 10;
         ctx.strokeRect(bx, by, bw, bh);
         ctx.shadowBlur = 0;
 
         // Corner accents
-        const cl = 24;
-        ctx.lineWidth = 9;
+        const cl = 28;
+        ctx.lineWidth = 12;
         ctx.strokeStyle = color;
         ctx.beginPath(); ctx.moveTo(bx, by+cl); ctx.lineTo(bx, by); ctx.lineTo(bx+cl, by); ctx.stroke();
         ctx.beginPath(); ctx.moveTo(bx+bw-cl, by); ctx.lineTo(bx+bw, by); ctx.lineTo(bx+bw, by+cl); ctx.stroke();
