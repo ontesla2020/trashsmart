@@ -686,7 +686,6 @@
         ctx.beginPath(); ctx.moveTo(bx+bw-cl, by+bh); ctx.lineTo(bx+bw, by+bh); ctx.lineTo(bx+bw, by+bh-cl); ctx.stroke();
 
         // Category label
-        const resolved = resolvedMap[d.id];
         const catLabel = resolved ? resolved.bin : (d.result ? d.result.bin : d.label);
         const emoji = resolved ? resolved.emoji : (d.result ? d.result.emoji : "?");
         const label = emoji + " " + d.label + " — " + catLabel + " (" + d.confidence + "%)";
