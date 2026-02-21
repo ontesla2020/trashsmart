@@ -185,6 +185,8 @@
     .canvas-wrapper.visible { display: block; }
     #preview-canvas {
       width: 100%;
+      max-height: 450px;
+      object-fit: contain;
       display: block;
     }
     .analyze-btn {
@@ -665,21 +667,36 @@
         const bx = x1 * w, by = y1 * h;
         const bw = (x2 - x1) * w, bh = (y2 - y1) * h;
 
-        // Box
+        // Thick box with glow
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 10;
         ctx.strokeStyle = color;
-        ctx.lineWidth = 3;
+        ctx.lineWidth = 6;
         ctx.strokeRect(bx, by, bw, bh);
+        ctx.shadowBlur = 0;
 
-        // Label background
-        const label = `${d.label} ${d.confidence}%`;
-        ctx.font = 'bold 14px DM Sans, sans-serif';
+        // Corner accents
+        const cl = 24;
+        ctx.lineWidth = 9;
+        ctx.strokeStyle = color;
+        ctx.beginPath(); ctx.moveTo(bx, by+cl); ctx.lineTo(bx, by); ctx.lineTo(bx+cl, by); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(bx+bw-cl, by); ctx.lineTo(bx+bw, by); ctx.lineTo(bx+bw, by+cl); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(bx, by+bh-cl); ctx.lineTo(bx, by+bh); ctx.lineTo(bx+cl, by+bh); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(bx+bw-cl, by+bh); ctx.lineTo(bx+bw, by+bh); ctx.lineTo(bx+bw, by+bh-cl); ctx.stroke();
+
+        // Category label
+        const resolved = resolvedMap[d.id];
+        const catLabel = resolved ? resolved.bin : (d.result ? d.result.bin : d.label);
+        const emoji = resolved ? resolved.emoji : (d.result ? d.result.emoji : "?");
+        const label = emoji + " " + d.label + " — " + catLabel + " (" + d.confidence + "%)";
+        ctx.font = "bold 15px sans-serif";
         const tw = ctx.measureText(label).width;
+        const lh = 30;
+        const ly = by > lh ? by - lh : by + bh;
         ctx.fillStyle = color;
-        ctx.fillRect(bx, by - 22, tw + 12, 22);
-
-        // Label text
-        ctx.fillStyle = '#000';
-        ctx.fillText(label, bx + 6, by - 6);
+        ctx.fillRect(bx, ly, tw + 16, lh);
+        ctx.fillStyle = "#000000";
+        ctx.fillText(label, bx + 8, ly + 20);
       });
     };
 
